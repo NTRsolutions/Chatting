@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/phonebackground"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
+    tools:context=".Home">
+
+    <TextView
+        android:id="@+id/statusText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Signed Out"
+        android:visibility="gone"
+        />
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
+        >
+
+
+
+   <RelativeLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:layout_centerInParent="true"
+       >
+
+       <ImageView
+           android:layout_width="140dp"
+           android:layout_height="120dp"
+           android:background="@drawable/logo"
+           android:layout_centerHorizontal="true"
+           android:id="@+id/p_logoImageView"
+           />
+
+    <com.github.florent37.materialtextfield.MaterialTextField
+        android:layout_below="@+id/p_logoImageView"
+        android:id="@+id/p_materialText1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        app:mtf_labelColor="@color/white"
+        app:mtf_image="@drawable/ic_smartphone"
+        android:layout_centerHorizontal="true"
+        >
+
+        <EditText
+            android:id="@+id/phoneText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Phone Number"
+            android:inputType="phone"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:maxLength="13"
+            />
+
+    </com.github.florent37.materialtextfield.MaterialTextField>
+
+
+    <LinearLayout
+        android:id="@+id/p_linear1"
+        android:layout_below="@+id/p_materialText1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="24dp"
+        >
+
+        <mehdi.sakout.fancybuttons.FancyButton
+            android:id="@+id/sendButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="10dp"
+            fancy:fb_borderColor="@color/googleGreen"
+            fancy:fb_borderWidth="1dp"
+            fancy:fb_defaultColor="@color/googleGreen"
+            fancy:fb_focusColor="@color/appColor"
+            fancy:fb_radius="7dp"
+            fancy:fb_text="Send OTP"
+            fancy:fb_textColor="@color/black90"
+            android:layout_weight="1"
+            android:layout_marginEnd="16dp"
+            android:onClick="sendCode"
+            />
+
+        <mehdi.sakout.fancybuttons.FancyButton
+            android:id="@+id/resendButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="10dp"
+            fancy:fb_borderColor="@color/lightCoral"
+            fancy:fb_borderWidth="1dp"
+            fancy:fb_defaultColor="@color/lightCoral"
+            fancy:fb_focusColor="@color/appColor"
+            fancy:fb_radius="7dp"
+            fancy:fb_text="Resend OTP"
+            fancy:fb_textColor="@color/black90"
+            android:layout_weight="1"
+            android:onClick="resendCode"
+            />
+
+    </LinearLayout>
+
+
+
+
+        <com.github.florent37.materialtextfield.MaterialTextField
+            android:id="@+id/p_materialText2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            app:mtf_labelColor="@color/white"
+            app:mtf_image="@drawable/ic_otp"
+            android:layout_below="@id/p_linear1"
+            >
+
+            <EditText
+                android:id="@+id/codeText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="CODE"
+                android:inputType="phone"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:maxLength="8"
+                />
+
+        </com.github.florent37.materialtextfield.MaterialTextField>
+
+
+        <mehdi.sakout.fancybuttons.FancyButton
+            android:id="@+id/verifyButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="10dp"
+            fancy:fb_borderColor="@color/appColor"
+            fancy:fb_borderWidth="1dp"
+            fancy:fb_defaultColor="@color/appColor"
+            fancy:fb_focusColor="@color/googleGreen"
+            fancy:fb_radius="7dp"
+            fancy:fb_text="Submit"
+            fancy:fb_textColor="@color/black90"
+            android:layout_below="@id/p_materialText2"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
+            android:onClick="verifyCode"
+            android:layout_marginBottom="24dp"
+            />
+
+
+    <Button
+        android:id="@+id/signoutButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="signOut"
+        android:text="Sign Out"
+        android:visibility="gone"
+        />
+
+
+
+
+
+   </RelativeLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+</RelativeLayout>
+
+<!--
+
+ <TextView
+        android:id="@+id/statusText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Signed Out"
+        />
+
+
+ <EditText
+        android:id="@+id/phoneText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Phone number"
+        android:inputType="phone"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/sendButton"
+        app:layout_constraintTop_toBottomOf="@+id/statusText" />
+
+    <Button
+        android:id="@+id/sendButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="sendCode"
+        android:text="Send Code"
+        app:layout_constraintBottom_toTopOf="@+id/resendButton"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/phoneText" />
+
+    <Button
+        android:id="@+id/resendButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="resendCode"
+        android:text="Resend Code"
+        app:layout_constraintBottom_toTopOf="@+id/codeText"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sendButton" />
+
+    <EditText
+        android:id="@+id/codeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Code"
+        android:inputType="number"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/verifyButton"
+        app:layout_constraintTop_toBottomOf="@+id/resendButton" />
+
+    <Button
+        android:id="@+id/verifyButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="verifyCode"
+        android:text="Verify Code"
+        app:layout_constraintBottom_toTopOf="@+id/signoutButton"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/codeText" />
+
+    <Button
+        android:id="@+id/signoutButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="signOut"
+        android:text="Sign Out"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/verifyButton" />
+
+
+-->
