@@ -39,17 +39,37 @@
            android:id="@+id/p_logoImageView"
            />
 
-    <com.github.florent37.materialtextfield.MaterialTextField
-        android:layout_below="@+id/p_logoImageView"
+
+
+       <LinearLayout
+           android:id="@+id/p_linear3"
+           android:layout_below="@+id/p_logoImageView"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:orientation="horizontal"
+           android:weightSum="2"
+           android:layout_marginEnd="@dimen/space16"
+           android:layout_marginStart="@dimen/space16"
+           >
+
+           <com.hbb20.CountryCodePicker
+               android:id="@+id/p_ccp"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               app:ccp_countryPreference="in"
+               app:ccpDialog_textColor="@color/white"
+               app:ccp_contentColor="@color/white"
+               android:layout_gravity="bottom"
+               />
+
+
+
+       <com.github.florent37.materialtextfield.MaterialTextField
         android:id="@+id/p_materialText1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
-        app:mtf_labelColor="@color/white"
+           app:mtf_labelColor="@color/white"
         app:mtf_image="@drawable/ic_smartphone"
-        android:layout_centerHorizontal="true"
         >
 
         <EditText
@@ -61,21 +81,23 @@
             android:textColor="@color/black"
             android:textStyle="bold"
             android:textSize="18sp"
-            android:maxLength="13"
+            android:maxLength="10"
             />
 
     </com.github.florent37.materialtextfield.MaterialTextField>
 
+       </LinearLayout>
+
 
     <LinearLayout
         android:id="@+id/p_linear1"
-        android:layout_below="@+id/p_materialText1"
+        android:layout_below="@+id/p_linear3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:weightSum="2"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginStart="@dimen/space16"
+        android:layout_marginEnd="@dimen/space16"
         android:layout_marginTop="24dp"
         >
 
@@ -95,7 +117,7 @@
             fancy:fb_text="Send OTP"
             fancy:fb_textColor="@color/black90"
             android:layout_weight="1"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="@dimen/space16"
             android:onClick="sendCode"
             />
 
@@ -103,7 +125,7 @@
             android:id="@+id/resendButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="@dimen/space16"
             android:paddingBottom="10dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
@@ -123,39 +145,38 @@
 
 
 
-
-        <com.github.florent37.materialtextfield.MaterialTextField
-            android:id="@+id/p_materialText2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
-            app:mtf_labelColor="@color/white"
-            app:mtf_image="@drawable/ic_otp"
-            android:layout_below="@id/p_linear1"
-            >
-
-            <EditText
-                android:id="@+id/codeText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="CODE"
-                android:inputType="phone"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:maxLength="8"
-                />
-
-        </com.github.florent37.materialtextfield.MaterialTextField>
+       <com.chaos.view.PinView
+           android:id="@+id/codeText"
+           style="@style/PinWidget.PinView"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:cursorVisible="true"
+           android:inputType="number"
+           android:itemBackground="@color/whiteSmoke"
+           android:layout_centerHorizontal="true"
+           android:textColor="@color/black"
+           android:textSize="18sp"
+           android:textStyle="bold"
+           app:cursorColor="@color/black90"
+           app:cursorWidth="2dp"
+           app:itemCount="6"
+           app:itemHeight="48dp"
+           app:itemRadius="4dp"
+           app:itemSpacing="6dp"
+           app:itemWidth="48dp"
+           app:lineColor="@color/whiteSmoke"
+           app:lineWidth="2dp"
+           app:viewType="rectangle"
+           android:layout_marginTop="48dp"
+           android:layout_below="@id/p_linear1"
+           />
 
 
         <mehdi.sakout.fancybuttons.FancyButton
             android:id="@+id/verifyButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="@dimen/space16"
             android:paddingBottom="10dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
@@ -167,9 +188,9 @@
             fancy:fb_radius="7dp"
             fancy:fb_text="Submit"
             fancy:fb_textColor="@color/black90"
-            android:layout_below="@id/p_materialText2"
+            android:layout_below="@id/codeText"
             android:layout_marginTop="24dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="@dimen/space16"
             android:onClick="verifyCode"
             android:layout_marginBottom="24dp"
             />
@@ -192,9 +213,37 @@
 
     </android.support.v4.widget.NestedScrollView>
 
+
 </RelativeLayout>
 
 <!--
+
+<com.github.florent37.materialtextfield.MaterialTextField
+            android:id="@+id/p_materialText2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/space16"
+            android:layout_marginStart="@dimen/space16"
+            android:layout_marginTop="24dp"
+            app:mtf_labelColor="@color/white"
+            app:mtf_image="@drawable/ic_otp"
+            android:layout_below="@id/p_linear1"
+            >
+
+            <EditText
+                android:id="@+id/codeText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="CODE"
+                android:inputType="phone"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:maxLength="8"
+                />
+
+        </com.github.florent37.materialtextfield.MaterialTextField>
+
 
  <TextView
         android:id="@+id/statusText"

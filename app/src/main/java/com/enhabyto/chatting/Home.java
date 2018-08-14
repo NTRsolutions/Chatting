@@ -1,13 +1,10 @@
 package com.enhabyto.chatting;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -16,7 +13,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.florent37.materialtextfield.MaterialTextField;
+import com.chaos.view.PinView;
+import com.github.johnpersano.supertoasts.library.Style;
+import com.github.johnpersano.supertoasts.library.SuperActivityToast;
+import com.github.johnpersano.supertoasts.library.utils.PaletteUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
@@ -24,9 +24,9 @@ import com.google.firebase.FirebaseTooManyRequestsException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.hbb20.CountryCodePicker;
 
 import java.util.concurrent.TimeUnit;
 
@@ -38,12 +38,13 @@ public class Home extends AppCompatActivity {
     private static final String TAG = "PhoneAuth";
 
     private EditText phoneText;
-    private EditText codeText;
+    private PinView codeText;
     private FancyButton verifyButton;
     private FancyButton sendButton;
     private FancyButton resendButton;
     private Button signoutButton;
     private TextView statusText;
+    private CountryCodePicker countryCodePicker;
 
     private String phoneVerificationId;
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks
@@ -64,6 +65,7 @@ public class Home extends AppCompatActivity {
         resendButton = findViewById(R.id.resendButton);
         signoutButton = findViewById(R.id.signoutButton);
         statusText = findViewById(R.id.statusText);
+        countryCodePicker = findViewById(R.id.p_ccp);
 
         verifyButton.setEnabled(false);
         resendButton.setEnabled(false);
@@ -71,8 +73,8 @@ public class Home extends AppCompatActivity {
         statusText.setText("Signed Out");
 
         fbAuth = FirebaseAuth.getInstance();
-        
     }
+
 
     public void sendCode(View view) {
 
@@ -82,16 +84,27 @@ public class Home extends AppCompatActivity {
 
 
                 String phoneNumber = phoneText.getText().toString();
+                String countryCode = countryCodePicker.getFullNumberWithPlus();
 
-                if (TextUtils.isEmpty(phoneNumber) || phoneNumber.length() < 12){
+                if (TextUtils.isEmpty(countryCode)){
                     new SweetAlertDialog(Home.this, SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Oops...")
-                            .setContentText("incorrect mobile number! Enter Mobile number with Country Code.")
+                            .setContentText("Choose your Country!")
                             .show();
                     return;
                 }
 
-                setUpVerificatonCallbacks();
+                if (TextUtils.isEmpty(phoneNumber) || phoneNumber.length() < 10){
+                    new SweetAlertDialog(Home.this, SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Oops...")
+                            .setContentText("Incorrect Mobile Number! ")
+                            .show();
+                    return;
+                }
+
+                phoneNumber = countryCode+phoneNumber;
+
+                setUpVerificationCallbacks();
 
                 PhoneAuthProvider.getInstance().verifyPhoneNumber(
                         phoneNumber,        // Phone number to verify
@@ -112,7 +125,7 @@ public class Home extends AppCompatActivity {
 
     }
 
-    private void setUpVerificatonCallbacks() {
+    private void setUpVerificationCallbacks() {
 
         verificationCallbacks =
                 new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
@@ -122,7 +135,7 @@ public class Home extends AppCompatActivity {
                             PhoneAuthCredential credential) {
 
                         signoutButton.setEnabled(true);
-                        statusText.setText("Signed In");
+                       // statusText.setText("Signed In");
                         resendButton.setEnabled(false);
                         verifyButton.setEnabled(false);
                         codeText.setText("");
@@ -134,17 +147,36 @@ public class Home extends AppCompatActivity {
 
                         if (e instanceof FirebaseAuthInvalidCredentialsException) {
                             // Invalid request
-                            Log.d(TAG, "Invalid credential: "
-                                    + e.getLocalizedMessage());
+                          //  Log.d(TAG, "Invalid credential: "
+                           //         + e.getLocalizedMessage());
+                            new SweetAlertDialog(Home.this, SweetAlertDialog.ERROR_TYPE)
+                                    .setTitleText("Invalid credential")
+                                    .setContentText(e.getLocalizedMessage())
+                                    .show();
+
                         } else if (e instanceof FirebaseTooManyRequestsException) {
                             // SMS quota exceeded
                             Log.d(TAG, "SMS Quota exceeded.");
+                            Toast.makeText(Home.this, "SMS Quota exceeded.", Toast.LENGTH_SHORT).show();
                         }
                     }
 
                     @Override
                     public void onCodeSent(String verificationId,
                                            PhoneAuthProvider.ForceResendingToken token) {
+
+                        String phoneNumber = phoneText.getText().toString();
+                        String countryCode = countryCodePicker.getFullNumberWithPlus();
+
+                        phoneNumber = countryCode+phoneNumber;
+
+                        SuperActivityToast.create(Home.this, new Style())
+                                .setProgressBarColor(Color.BLACK)
+                                .setText("OTP Sent to "+phoneNumber)
+                                .setDuration(Style.DURATION_LONG)
+                                .setFrame(Style.FRAME_KITKAT)
+                                .setColor(getResources().getColor(R.color.whiteSmoke))
+                                .setAnimations(Style.ANIMATIONS_POP).show();
 
                         phoneVerificationId = verificationId;
                         resendToken = token;
@@ -193,9 +225,9 @@ public class Home extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            signoutButton.setEnabled(true);
+                           // signoutButton.setEnabled(true);
                             codeText.setText("");
-                            statusText.setText("Signed In");
+                          //  statusText.setText("Signed In");
                             resendButton.setEnabled(false);
                             verifyButton.setEnabled(false);
                             //FirebaseUser user = task.getResult().getUser();
@@ -205,7 +237,11 @@ public class Home extends AppCompatActivity {
                         } else {
                             if (task.getException() instanceof
                                     FirebaseAuthInvalidCredentialsException) {
-                                Toast.makeText(Home.this, "Error: "+task.getException().toString(), Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(Home.this, "Error: "+task.getException().toString(), Toast.LENGTH_SHORT).show();
+                                new SweetAlertDialog(Home.this, SweetAlertDialog.ERROR_TYPE)
+                                        .setTitleText("Error")
+                                        .setContentText(task.getException().getLocalizedMessage())
+                                        .show();
                                 // The verification code entered was invalid
                             }
                         }
@@ -219,16 +255,26 @@ public class Home extends AppCompatActivity {
             @Override
             public void onConnectionSuccess() {
                 String phoneNumber = phoneText.getText().toString();
+                String countryCode = countryCodePicker.getFullNumberWithPlus();
 
-                if (TextUtils.isEmpty(phoneNumber) || phoneNumber.length() < 12){
+                if (TextUtils.isEmpty(countryCode)){
                     new SweetAlertDialog(Home.this, SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Oops...")
-                            .setContentText("incorrect mobile number! Enter Mobile number with Country Code")
+                            .setContentText("Choose your Country!")
                             .show();
                     return;
                 }
 
-                setUpVerificatonCallbacks();
+                if (TextUtils.isEmpty(phoneNumber) || phoneNumber.length() < 10){
+                    new SweetAlertDialog(Home.this, SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Oops...")
+                            .setContentText("Incorrect Mobile Number! ")
+                            .show();
+                    return;
+                }
+
+                phoneNumber = countryCode+phoneNumber;
+                setUpVerificationCallbacks();
 
                 PhoneAuthProvider.getInstance().verifyPhoneNumber(
                         phoneNumber,

@@ -23,7 +23,9 @@
         <activity
             android:name=".Home"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize|stateHidden">
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:theme="@style/MobileLoginTheme"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
