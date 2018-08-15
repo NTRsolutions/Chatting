@@ -10,10 +10,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.chaos.view.PinView;
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.github.johnpersano.supertoasts.library.Style;
 import com.github.johnpersano.supertoasts.library.SuperActivityToast;
 import com.github.johnpersano.supertoasts.library.utils.PaletteUtils;
@@ -45,6 +48,7 @@ public class Home extends AppCompatActivity {
     private Button signoutButton;
     private TextView statusText;
     private CountryCodePicker countryCodePicker;
+    private RelativeLayout otpRelativeLayout;
 
     private String phoneVerificationId;
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks
@@ -66,8 +70,9 @@ public class Home extends AppCompatActivity {
         signoutButton = findViewById(R.id.signoutButton);
         statusText = findViewById(R.id.statusText);
         countryCodePicker = findViewById(R.id.p_ccp);
+        otpRelativeLayout = findViewById(R.id.p_otpRelativeLayout);
 
-        verifyButton.setEnabled(false);
+        //verifyButton.setEnabled(false);
         resendButton.setEnabled(false);
         signoutButton.setEnabled(false);
         statusText.setText("Signed Out");
@@ -164,6 +169,12 @@ public class Home extends AppCompatActivity {
                     @Override
                     public void onCodeSent(String verificationId,
                                            PhoneAuthProvider.ForceResendingToken token) {
+
+                        otpRelativeLayout.setVisibility(View.VISIBLE);
+                        YoYo.with(Techniques.SlideInUp)
+                                .duration(700)
+                                .repeat(1)
+                                .playOn(otpRelativeLayout);
 
                         String phoneNumber = phoneText.getText().toString();
                         String countryCode = countryCodePicker.getFullNumberWithPlus();

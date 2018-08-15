@@ -50,6 +50,7 @@
            android:weightSum="2"
            android:layout_marginEnd="@dimen/space16"
            android:layout_marginStart="@dimen/space16"
+           android:layout_marginTop="@dimen/space16"
            >
 
            <com.hbb20.CountryCodePicker
@@ -144,6 +145,14 @@
     </LinearLayout>
 
 
+       <RelativeLayout
+           android:id="@+id/p_otpRelativeLayout"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:layout_below="@+id/p_linear1"
+           >
+
+
 
        <com.chaos.view.PinView
            android:id="@+id/codeText"
@@ -160,15 +169,14 @@
            app:cursorColor="@color/black90"
            app:cursorWidth="2dp"
            app:itemCount="6"
-           app:itemHeight="48dp"
+           app:itemHeight="36dp"
            app:itemRadius="4dp"
            app:itemSpacing="6dp"
-           app:itemWidth="48dp"
+           app:itemWidth="36dp"
            app:lineColor="@color/whiteSmoke"
            app:lineWidth="2dp"
            app:viewType="rectangle"
            android:layout_marginTop="48dp"
-           android:layout_below="@id/p_linear1"
            />
 
 
@@ -194,6 +202,9 @@
             android:onClick="verifyCode"
             android:layout_marginBottom="24dp"
             />
+
+       </RelativeLayout>
+
 
 
     <Button

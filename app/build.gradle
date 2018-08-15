@@ -33,6 +33,9 @@ dependencies {
     implementation 'com.chaos.view:pinview:1.4.1' //otp view
     implementation 'com.github.ybq:Android-SpinKit:1.1.0' // progress
     implementation 'com.github.johnpersano:supertoasts:2.0' // advance toast
+    compile 'com.android.support:support-compat:27.1.1' //yoyo
+    compile 'com.daimajia.easing:library:2.0@aar'
+    compile 'com.daimajia.androidanimations:library:2.3@aar'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
