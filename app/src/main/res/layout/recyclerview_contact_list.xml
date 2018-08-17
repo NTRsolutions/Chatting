@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/tools"
+    android:id="@+id/rla_cardview"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    card_view:cardElevation="5dp"
+    card_view:cardMaxElevation="5dp"
+    android:alwaysDrawnWithCache="true"
+    app:cardBackgroundColor="@color/whiteSmoke"
+    android:background="@color/whiteSmoke"
+    android:layout_centerHorizontal="true"
+    app:cardPreventCornerOverlap="true"
+    android:fitsSystemWindows="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/rya_relativeLayout"
+        android:background="@color/whiteSmoke"
+        xmlns:app="http://schemas.android.com/tools"
+        android:padding="8dp"
+        >
+
+
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            app:civ_shadow="true"
+            app:civ_shadow_radius="2"
+            app:civ_shadow_color="@color/appColor"
+            android:id="@+id/rc_profile_image"
+            android:background="@drawable/ic_default_profile_image"
+            />
+
+        <TextView
+            android:id="@+id/ec_profileName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/rc_profile_image"
+            android:layout_alignTop="@id/rc_profile_image"
+            android:layout_marginTop="7dp"
+            android:layout_marginStart="@dimen/space16"
+            android:hint="@string/NameplaceHolder"
+            android:textColorHint="@color/black90"
+            android:textColor="@color/black"
+            />
+
+
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

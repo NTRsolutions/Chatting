@@ -1,6 +1,7 @@
 package com.enhabyto.chatting;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -19,7 +20,7 @@ import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.github.johnpersano.supertoasts.library.Style;
 import com.github.johnpersano.supertoasts.library.SuperActivityToast;
-import com.github.johnpersano.supertoasts.library.utils.PaletteUtils;
+import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
@@ -29,14 +30,17 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.hbb20.CountryCodePicker;
 
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import mehdi.sakout.fancybuttons.FancyButton;
 
-public class Home extends AppCompatActivity {
+public class PhoneLogin extends AppCompatActivity {
 
     private static final String TAG = "PhoneAuth";
 
@@ -49,6 +53,13 @@ public class Home extends AppCompatActivity {
     private TextView statusText;
     private CountryCodePicker countryCodePicker;
     private RelativeLayout otpRelativeLayout;
+    private SpinKitView spinKitView;
+
+    private SharedPreferences sharedPreferences;
+    private static final String LANDING_ACTIVITY = "landingActivity";
+    private static final String FIRST_SCREEN = "firstScreen";
+    private static final String MAIN_PAGE = "mainPage";
+    private static final String PROFILE_SETUP = "profileSetup";
 
     private String phoneVerificationId;
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks
@@ -56,11 +67,12 @@ public class Home extends AppCompatActivity {
     private PhoneAuthProvider.ForceResendingToken resendToken;
 
     private FirebaseAuth fbAuth;
+    private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("user_profiles");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        setContentView(R.layout.activity_phone_login);
 
         phoneText = findViewById(R.id.phoneText);
         codeText = findViewById(R.id.codeText);
@@ -71,19 +83,41 @@ public class Home extends AppCompatActivity {
         statusText = findViewById(R.id.statusText);
         countryCodePicker = findViewById(R.id.p_ccp);
         otpRelativeLayout = findViewById(R.id.p_otpRelativeLayout);
+        spinKitView = findViewById(R.id.p_spin_kit);
 
         //verifyButton.setEnabled(false);
         resendButton.setEnabled(false);
         signoutButton.setEnabled(false);
         statusText.setText("Signed Out");
 
+        sharedPreferences = getSharedPreferences(LANDING_ACTIVITY, MODE_PRIVATE);
+
         fbAuth = FirebaseAuth.getInstance();
+
+    }
+
+    public void onStart(){
+        super.onStart();
+        checkLandingPage();
+    }
+
+    private void checkLandingPage() {
+        String decider = sharedPreferences.getString(FIRST_SCREEN, "");
+        if (TextUtils.equals(decider, PROFILE_SETUP)) {
+            startActivity(new Intent(PhoneLogin.this, ProfileSetup.class));
+            PhoneLogin.this.finish();
+        }
+        else if (TextUtils.equals(decider, MAIN_PAGE)) {
+            startActivity(new Intent(PhoneLogin.this, MainPage.class));
+            PhoneLogin.this.finish();
+        }
+
     }
 
 
     public void sendCode(View view) {
 
-        new CheckNetworkConnection(Home.this, new CheckNetworkConnection.OnConnectionCallback() {
+        new CheckNetworkConnection(PhoneLogin.this, new CheckNetworkConnection.OnConnectionCallback() {
             @Override
             public void onConnectionSuccess() {
 
@@ -92,7 +126,7 @@ public class Home extends AppCompatActivity {
                 String countryCode = countryCodePicker.getFullNumberWithPlus();
 
                 if (TextUtils.isEmpty(countryCode)){
-                    new SweetAlertDialog(Home.this, SweetAlertDialog.ERROR_TYPE)
+                    new SweetAlertDialog(PhoneLogin.this, SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Oops...")
                             .setContentText("Choose your Country!")
                             .show();
@@ -100,13 +134,14 @@ public class Home extends AppCompatActivity {
                 }
 
                 if (TextUtils.isEmpty(phoneNumber) || phoneNumber.length() < 10){
-                    new SweetAlertDialog(Home.this, SweetAlertDialog.ERROR_TYPE)
+                    new SweetAlertDialog(PhoneLogin.this, SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Oops...")
                             .setContentText("Incorrect Mobile Number! ")
                             .show();
                     return;
                 }
 
+                spinKitView.setVisibility(View.VISIBLE);
                 phoneNumber = countryCode+phoneNumber;
 
                 setUpVerificationCallbacks();
@@ -115,13 +150,14 @@ public class Home extends AppCompatActivity {
                         phoneNumber,        // Phone number to verify
                         60,                 // Timeout duration
                         TimeUnit.SECONDS,   // Unit of timeout
-                        Home.this,               // Activity (for callback binding)
+                        PhoneLogin.this,               // Activity (for callback binding)
                         verificationCallbacks);
+
 
             }
             @Override
             public void onConnectionFail(String msg) {
-                NoInternetConnectionAlert noInternetConnectionAlert = new NoInternetConnectionAlert(Home.this);
+                NoInternetConnectionAlert noInternetConnectionAlert = new NoInternetConnectionAlert(PhoneLogin.this);
                 noInternetConnectionAlert.DisplayNoInternetConnection();
 
             }
@@ -144,6 +180,7 @@ public class Home extends AppCompatActivity {
                         resendButton.setEnabled(false);
                         verifyButton.setEnabled(false);
                         codeText.setText("");
+
                         signInWithPhoneAuthCredential(credential);
                     }
 
@@ -154,15 +191,17 @@ public class Home extends AppCompatActivity {
                             // Invalid request
                           //  Log.d(TAG, "Invalid credential: "
                            //         + e.getLocalizedMessage());
-                            new SweetAlertDialog(Home.this, SweetAlertDialog.ERROR_TYPE)
+                            new SweetAlertDialog(PhoneLogin.this, SweetAlertDialog.ERROR_TYPE)
                                     .setTitleText("Invalid credential")
                                     .setContentText(e.getLocalizedMessage())
                                     .show();
+                            spinKitView.setVisibility(View.GONE);
 
                         } else if (e instanceof FirebaseTooManyRequestsException) {
                             // SMS quota exceeded
                             Log.d(TAG, "SMS Quota exceeded.");
-                            Toast.makeText(Home.this, "SMS Quota exceeded.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(PhoneLogin.this, "SMS Quota exceeded.", Toast.LENGTH_SHORT).show();
+                            spinKitView.setVisibility(View.GONE);
                         }
                     }
 
@@ -170,10 +209,11 @@ public class Home extends AppCompatActivity {
                     public void onCodeSent(String verificationId,
                                            PhoneAuthProvider.ForceResendingToken token) {
 
+                        spinKitView.setVisibility(View.GONE);
                         otpRelativeLayout.setVisibility(View.VISIBLE);
                         YoYo.with(Techniques.SlideInUp)
                                 .duration(700)
-                                .repeat(1)
+                                .repeat(0)
                                 .playOn(otpRelativeLayout);
 
                         String phoneNumber = phoneText.getText().toString();
@@ -181,12 +221,13 @@ public class Home extends AppCompatActivity {
 
                         phoneNumber = countryCode+phoneNumber;
 
-                        SuperActivityToast.create(Home.this, new Style())
+                        SuperActivityToast.create(PhoneLogin.this, new Style())
                                 .setProgressBarColor(Color.BLACK)
-                                .setText("OTP Sent to "+phoneNumber)
+                                .setText("  OTP Sent to "+phoneNumber)
                                 .setDuration(Style.DURATION_LONG)
-                                .setFrame(Style.FRAME_KITKAT)
-                                .setColor(getResources().getColor(R.color.whiteSmoke))
+                                .setIconResource(R.drawable.ic_info)
+                                .setFrame(Style.FRAME_STANDARD)
+                                .setColor(getResources().getColor(R.color.black90))
                                 .setAnimations(Style.ANIMATIONS_POP).show();
 
                         phoneVerificationId = verificationId;
@@ -202,13 +243,13 @@ public class Home extends AppCompatActivity {
     public void verifyCode(View view) {
 
 
-        new CheckNetworkConnection(Home.this, new CheckNetworkConnection.OnConnectionCallback() {
+        new CheckNetworkConnection(PhoneLogin.this, new CheckNetworkConnection.OnConnectionCallback() {
             @Override
             public void onConnectionSuccess() {
                 String code = codeText.getText().toString();
 
                 if (TextUtils.isEmpty(code) || code.length() < 6){
-                    new SweetAlertDialog(Home.this, SweetAlertDialog.ERROR_TYPE)
+                    new SweetAlertDialog(PhoneLogin.this, SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Oops...")
                             .setContentText("enter full code!")
                             .show();
@@ -221,7 +262,7 @@ public class Home extends AppCompatActivity {
             }
             @Override
             public void onConnectionFail(String msg) {
-                NoInternetConnectionAlert noInternetConnectionAlert = new NoInternetConnectionAlert(Home.this);
+                NoInternetConnectionAlert noInternetConnectionAlert = new NoInternetConnectionAlert(PhoneLogin.this);
                 noInternetConnectionAlert.DisplayNoInternetConnection();
 
             }
@@ -242,14 +283,27 @@ public class Home extends AppCompatActivity {
                             resendButton.setEnabled(false);
                             verifyButton.setEnabled(false);
                             //FirebaseUser user = task.getResult().getUser();
-                            startActivity(new Intent(Home.this, Contacts.class));
-                            Toast.makeText(Home.this, "Signed in", Toast.LENGTH_SHORT).show();
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putString(FIRST_SCREEN, PROFILE_SETUP);
+                            editor.apply();
+
+                            String user_uid = Objects.requireNonNull(fbAuth.getCurrentUser()).getUid();
+                            String phone_number = Objects.requireNonNull(fbAuth.getCurrentUser()).getPhoneNumber();
+
+                           // databaseReference.child(user_uid).child("uid").setValue(user_uid);
+                            databaseReference.child(user_uid).child("phone_number").setValue(phone_number);
+                            DatabaseReference secret = FirebaseDatabase.getInstance().getReference();
+                            secret.child("registered_contacts").child(user_uid).setValue(phone_number);
+
+                            startActivity(new Intent(PhoneLogin.this, ProfileSetup.class));
+                            PhoneLogin.this.finish();
+
 
                         } else {
                             if (task.getException() instanceof
                                     FirebaseAuthInvalidCredentialsException) {
-                                //Toast.makeText(Home.this, "Error: "+task.getException().toString(), Toast.LENGTH_SHORT).show();
-                                new SweetAlertDialog(Home.this, SweetAlertDialog.ERROR_TYPE)
+                                //Toast.makeText(PhoneLogin.this, "Error: "+task.getException().toString(), Toast.LENGTH_SHORT).show();
+                                new SweetAlertDialog(PhoneLogin.this, SweetAlertDialog.ERROR_TYPE)
                                         .setTitleText("Error")
                                         .setContentText(task.getException().getLocalizedMessage())
                                         .show();
@@ -262,14 +316,14 @@ public class Home extends AppCompatActivity {
 
     public void resendCode(View view) {
 
-        new CheckNetworkConnection(Home.this, new CheckNetworkConnection.OnConnectionCallback() {
+        new CheckNetworkConnection(PhoneLogin.this, new CheckNetworkConnection.OnConnectionCallback() {
             @Override
             public void onConnectionSuccess() {
                 String phoneNumber = phoneText.getText().toString();
                 String countryCode = countryCodePicker.getFullNumberWithPlus();
 
                 if (TextUtils.isEmpty(countryCode)){
-                    new SweetAlertDialog(Home.this, SweetAlertDialog.ERROR_TYPE)
+                    new SweetAlertDialog(PhoneLogin.this, SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Oops...")
                             .setContentText("Choose your Country!")
                             .show();
@@ -277,13 +331,14 @@ public class Home extends AppCompatActivity {
                 }
 
                 if (TextUtils.isEmpty(phoneNumber) || phoneNumber.length() < 10){
-                    new SweetAlertDialog(Home.this, SweetAlertDialog.ERROR_TYPE)
+                    new SweetAlertDialog(PhoneLogin.this, SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Oops...")
                             .setContentText("Incorrect Mobile Number! ")
                             .show();
                     return;
                 }
 
+                spinKitView.setVisibility(View.VISIBLE);
                 phoneNumber = countryCode+phoneNumber;
                 setUpVerificationCallbacks();
 
@@ -291,13 +346,13 @@ public class Home extends AppCompatActivity {
                         phoneNumber,
                         60,
                         TimeUnit.SECONDS,
-                        Home.this,
+                        PhoneLogin.this,
                         verificationCallbacks,
                         resendToken);
             }
             @Override
             public void onConnectionFail(String msg) {
-                NoInternetConnectionAlert noInternetConnectionAlert = new NoInternetConnectionAlert(Home.this);
+                NoInternetConnectionAlert noInternetConnectionAlert = new NoInternetConnectionAlert(PhoneLogin.this);
                 noInternetConnectionAlert.DisplayNoInternetConnection();
 
             }

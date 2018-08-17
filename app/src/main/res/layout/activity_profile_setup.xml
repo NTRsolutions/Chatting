@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
+    tools:context=".ProfileSetup">
+
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/ps_cardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space16"
+        android:layout_marginTop="@dimen/space16"
+        android:layout_marginEnd="@dimen/space16"
+        app:cardCornerRadius="7dp"
+        android:elevation="@dimen/space16"
+        tools:targetApi="lollipop">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/lightCoral"
+            >
+
+        <ImageView
+            android:id="@+id/ps_imageView1"
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            android:background="@drawable/profile_setup_image"
+            />
+
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            app:civ_shadow="true"
+            app:civ_shadow_radius="2"
+            app:civ_shadow_color="@color/appColor"
+            android:id="@+id/ps_profile_image"
+            android:layout_marginTop="70dp"
+            android:layout_centerHorizontal="true"
+            />
+
+        <com.github.florent37.materialtextfield.MaterialTextField
+            android:id="@+id/ps_materialText1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:mtf_labelColor="@color/black"
+            app:mtf_image="@drawable/ic_default_profile_image"
+            android:layout_below="@+id/ps_profile_image"
+            android:layout_marginTop="7dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="@dimen/space16"
+            android:layout_marginEnd="@dimen/space16"
+            app:mtf_openKeyboardOnFocus="true"
+            >
+
+            <EditText
+                android:id="@+id/ps_profileName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/enter_profile_name"
+                android:inputType="textPersonName"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black90"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:maxLength="30"
+                android:minLines="1"
+                />
+
+        </com.github.florent37.materialtextfield.MaterialTextField>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_below="@+id/ps_materialText1"
+                android:layout_marginTop="24dp"
+                android:background="@color/black90"
+                >
+
+            <mehdi.sakout.fancybuttons.FancyButton
+                android:id="@+id/ps_nextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:paddingBottom="10dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="10dp"
+                fancy:fb_borderWidth="1dp"
+                fancy:fb_defaultColor="#00000000"
+                fancy:fb_focusColor="@color/black90"
+                fancy:fb_fontIconResource="&#xf061;"
+                fancy:fb_iconPosition="right"
+                fancy:fb_iconPaddingLeft="7dp"
+                fancy:fb_radius="7dp"
+                fancy:fb_text="Next"
+                fancy:fb_textColor="@color/whiteSmoke"
+                android:layout_centerVertical="true"
+                />
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/space16"
+            android:layout_marginTop="@dimen/space16"
+            android:layout_marginStart="@dimen/space16"
+            android:layout_marginEnd="@dimen/space16"
+            android:layout_below="@+id/ps_cardView"
+            app:cardCornerRadius="3dp"
+            app:cardBackgroundColor="@color/white"
+            >
+
+            <ImageView
+                android:id="@+id/ps_demoImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                />
+
+
+        </android.support.v7.widget.CardView>
+
+
+
+        <com.github.ybq.android.spinkit.SpinKitView
+            android:visibility="gone"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/ps_spin_kit"
+            style="@style/SpinKitView.Large.Circle"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:SpinKit_Color="@color/white" />
+
+
+</RelativeLayout>

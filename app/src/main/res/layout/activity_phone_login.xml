@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/phonebackground"
     xmlns:fancy="http://schemas.android.com/apk/res-auto"
-    tools:context=".Home">
+    tools:context=".PhoneLogin">
 
     <TextView
         android:id="@+id/statusText"
@@ -50,7 +50,7 @@
            android:weightSum="2"
            android:layout_marginEnd="@dimen/space16"
            android:layout_marginStart="@dimen/space16"
-           android:layout_marginTop="@dimen/space16"
+           android:layout_marginTop="32dp"
            >
 
            <com.hbb20.CountryCodePicker
@@ -150,6 +150,7 @@
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
            android:layout_below="@+id/p_linear1"
+           android:visibility="gone"
            >
 
 
@@ -223,6 +224,17 @@
    </RelativeLayout>
 
     </android.support.v4.widget.NestedScrollView>
+
+    <com.github.ybq.android.spinkit.SpinKitView
+        android:visibility="gone"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/p_spin_kit"
+        style="@style/SpinKitView.Large.Circle"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:SpinKit_Color="@color/white" />
 
 
 </RelativeLayout>

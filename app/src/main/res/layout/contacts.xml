@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/fragment_container_add_money"
+    android:clickable="true"
+    android:focusable="true"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
+    tools:context=".Contacts">
+
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/main.appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:background="@color/whiteSmoke"
+        android:fitsSystemWindows="true"
+        >
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/main.collapsing"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|enterAlways"
+            android:fitsSystemWindows="true"
+            app:contentScrim="@color/white"
+            app:expandedTitleMarginStart="48dp"
+            app:expandedTitleMarginEnd="64dp"
+            android:background="@color/whiteSmoke"
+            tools:targetApi="lollipop">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/appColor"
+                >
+
+                <LinearLayout
+                    android:id="@+id/c_linearLayout1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="3"
+                    android:padding="7dp"
+                    >
+
+                    <EditText
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="2"
+                        android:background="@drawable/custom_rectangle_white_smoke"
+                        android:elevation="5dp"
+                        android:hint="@string/search"
+                        android:textSize="16sp"
+                        android:textColorHint="@color/black90"
+                        android:paddingStart="@dimen/space16"
+                        android:paddingEnd="@dimen/space16"
+                        android:textColor="@color/black"
+                        android:inputType="textPersonName"
+                        android:maxLength="30"
+                        />
+
+                    <mehdi.sakout.fancybuttons.FancyButton
+                        android:id="@+id/verifyButton"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="@dimen/space16"
+                        android:paddingBottom="10dp"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"
+                        android:paddingTop="10dp"
+                        fancy:fb_borderColor="@color/lightCoral"
+                        fancy:fb_borderWidth="1dp"
+                        fancy:fb_defaultColor="@color/lightCoral"
+                        fancy:fb_focusColor="@color/googleGreen"
+                        fancy:fb_radius="7dp"
+                        fancy:fb_text=" Refresh"
+                        fancy:fb_fontIconResource="&#xf021;"
+                        fancy:fb_textColor="@color/black"
+                        />
+
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        >
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/c_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/whiteSmoke"
+            />
+
+    </RelativeLayout>
+
+
+
+</android.support.design.widget.CoordinatorLayout>
