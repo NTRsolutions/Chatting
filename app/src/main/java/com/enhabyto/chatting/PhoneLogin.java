@@ -60,6 +60,7 @@ public class PhoneLogin extends AppCompatActivity {
     private static final String FIRST_SCREEN = "firstScreen";
     private static final String MAIN_PAGE = "mainPage";
     private static final String PROFILE_SETUP = "profileSetup";
+    private static final String MY_UID = "my_uid";
 
     private String phoneVerificationId;
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks
@@ -283,17 +284,20 @@ public class PhoneLogin extends AppCompatActivity {
                             resendButton.setEnabled(false);
                             verifyButton.setEnabled(false);
                             //FirebaseUser user = task.getResult().getUser();
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putString(FIRST_SCREEN, PROFILE_SETUP);
-                            editor.apply();
-
                             String user_uid = Objects.requireNonNull(fbAuth.getCurrentUser()).getUid();
                             String phone_number = Objects.requireNonNull(fbAuth.getCurrentUser()).getPhoneNumber();
 
-                           // databaseReference.child(user_uid).child("uid").setValue(user_uid);
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putString(FIRST_SCREEN, PROFILE_SETUP);
+                            editor.putString(MY_UID, user_uid);
+                            editor.apply();
+
+
+
+                            databaseReference.child(user_uid).child("uid").setValue(user_uid);
                             databaseReference.child(user_uid).child("phone_number").setValue(phone_number);
-                            DatabaseReference secret = FirebaseDatabase.getInstance().getReference();
-                            secret.child("registered_contacts").child(user_uid).setValue(phone_number);
+//                            DatabaseReference secret = FirebaseDatabase.getInstance().getReference();
+//                            secret.child("registered_contacts").child(user_uid).child("phone_number").setValue(phone_number);
 
                             startActivity(new Intent(PhoneLogin.this, ProfileSetup.class));
                             PhoneLogin.this.finish();

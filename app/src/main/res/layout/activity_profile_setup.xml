@@ -13,10 +13,11 @@
     <android.support.v7.widget.CardView
         android:id="@+id/ps_cardView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginStart="@dimen/space16"
         android:layout_marginTop="@dimen/space16"
         android:layout_marginEnd="@dimen/space16"
+        android:layout_marginBottom="@dimen/space16"
         app:cardCornerRadius="7dp"
         android:elevation="@dimen/space16"
         tools:targetApi="lollipop">
@@ -24,7 +25,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/lightCoral"
+            android:background="@color/appColor"
             >
 
         <ImageView
@@ -38,26 +39,16 @@
             android:layout_width="130dp"
             android:layout_height="130dp"
             app:civ_shadow="true"
-            app:civ_shadow_radius="2"
-            app:civ_shadow_color="@color/appColor"
+            app:civ_shadow_radius="20"
+            app:civ_border_width="3dp"
+            app:civ_border_color="@color/whiteSmoke"
+            app:civ_shadow_color="@color/lightCoral"
             android:id="@+id/ps_profile_image"
             android:layout_marginTop="70dp"
             android:layout_centerHorizontal="true"
             />
 
-        <com.github.florent37.materialtextfield.MaterialTextField
-            android:id="@+id/ps_materialText1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:mtf_labelColor="@color/black"
-            app:mtf_image="@drawable/ic_default_profile_image"
-            android:layout_below="@+id/ps_profile_image"
-            android:layout_marginTop="7dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginStart="@dimen/space16"
-            android:layout_marginEnd="@dimen/space16"
-            app:mtf_openKeyboardOnFocus="true"
-            >
+
 
             <EditText
                 android:id="@+id/ps_profileName"
@@ -67,20 +58,30 @@
                 android:inputType="textPersonName"
                 android:textColor="@color/black"
                 android:textColorHint="@color/black90"
+                android:background="@drawable/custom_rectangle_white_smoke"
+                android:padding="7dp"
+                android:layout_marginStart="@dimen/space16"
+                android:layout_marginEnd="@dimen/space16"
+                android:layout_marginTop="@dimen/space16"
                 android:textStyle="bold"
                 android:textSize="18sp"
                 android:maxLength="30"
                 android:minLines="1"
+                android:layout_below="@+id/ps_profile_image"
+                android:drawableStart="@drawable/ic_default_profile_image_18"
+                android:drawablePadding="@dimen/space16"
+                android:gravity="center_vertical"
+                android:elevation="7dp"
                 />
 
-        </com.github.florent37.materialtextfield.MaterialTextField>
+
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:layout_below="@+id/ps_materialText1"
                 android:layout_marginTop="24dp"
                 android:background="@color/black90"
+                android:layout_alignParentBottom="true"
                 >
 
             <mehdi.sakout.fancybuttons.FancyButton
@@ -109,30 +110,6 @@
         </RelativeLayout>
 
     </android.support.v7.widget.CardView>
-
-
-        <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="@dimen/space16"
-            android:layout_marginTop="@dimen/space16"
-            android:layout_marginStart="@dimen/space16"
-            android:layout_marginEnd="@dimen/space16"
-            android:layout_below="@+id/ps_cardView"
-            app:cardCornerRadius="3dp"
-            app:cardBackgroundColor="@color/white"
-            >
-
-            <ImageView
-                android:id="@+id/ps_demoImage"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                />
-
-
-        </android.support.v7.widget.CardView>
-
 
 
         <com.github.ybq.android.spinkit.SpinKitView

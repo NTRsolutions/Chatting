@@ -84,18 +84,7 @@ public class ProfileSetup extends AppCompatActivity {
         nextButton = findViewById(R.id.ps_nextButton);
         profileName = findViewById(R.id.ps_profileName);
         spinKitView = findViewById(R.id.ps_spin_kit);
-        demoImage = findViewById(R.id.ps_demoImage);
 
-        Picasso.with(ProfileSetup.this)
-                .load(R.drawable.chat)
-                .centerCrop()
-                .fit()
-                .into(demoImage);
-
-        YoYo.with(Techniques.SlideInUp)
-                .repeat(0)
-                .duration(2000)
-                .playOn(demoImage);
 
         profileImage.setOnClickListener(new View.OnClickListener() {
             @Override
