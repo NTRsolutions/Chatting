@@ -15,4 +15,10 @@
         <item name="colorAccent">@color/black90</item>
     </style>
 
+    <!--text style medium-->
+    <style name="MyCustomTextStyle" parent="@android:style/Theme.Light">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:fontFamily">ubuntu.ttf</item>
+    </style>
+
 </resources>

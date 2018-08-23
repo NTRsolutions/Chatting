@@ -39,9 +39,6 @@ public class Contacts extends Fragment {
     View view;
 
     RecyclerView recyclerView;
-    RelativeLayout emptyRelativeLayout, recyclerViewRelativeLayout;
-
-    TextView emptyTextView;
 
     // Creating RecyclerView.Adapter.
     RecyclerView.Adapter adapter ;
@@ -115,7 +112,8 @@ public class Contacts extends Fragment {
                 LoadContacts();
             }
         });
-        Toast.makeText(getActivity(), "a: "+list.isEmpty(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "a: "+list.isEmpty(), Toast.LENGTH_SHORT).show();
+        readContactsPermission();
 
         return view;
     }
@@ -154,25 +152,31 @@ public class Contacts extends Fragment {
 
                                             phoneNumber = phoneNumber.replace(")","").replace("(","").replace("-","").replace(" ","");
                                             if (Objects.requireNonNull(contacts).getPhone_number().contains(phoneNumber) && !TextUtils.equals(uid, contacts.getUid())){
-                                                Toast.makeText(getActivity(), ""+contacts.getUid(), Toast.LENGTH_SHORT).show();
+                                               // Toast.makeText(getActivity(), ""+contacts.getUid(), Toast.LENGTH_SHORT).show();
+                                                contacts.setName_saved_on_device(name);
                                                 list.add(contacts);
 
-                                                SharedPreferences.Editor editor = sharedPreferences.edit();
-                                                editor.putString(PHONE_NAME_ON_DEVICE+contacts.getPhone_number(), name);
-                                                editor.apply();
+                                               // SharedPreferences.Editor editor = sharedPreferences.edit();
+                                                //editor.putString(PHONE_NAME_ON_DEVICE+contacts.getPhone_number(), name);
+                                                //editor.apply();
 
 //                                                storing contacts data
                                                // String uid_store = contacts.getUid().substring(contacts.getUid().length()-7, contacts.getUid().length())
                                                 SharedPreferences.Editor editor1 = sharedPreferencesContactsData.edit();
-                                                editor.putString(contacts.getPhone_number()+"CN",phoneNumber); // contacts number
-                                                editor.putString(contacts.getPhone_number()+"PN",contacts.getProfile_name());
-                                                editor.putString(contacts.getPhone_number()+"PURL",contacts.getProfile_image_url());
-                                                editor.putString(contacts.getPhone_number()+"UID",contacts.getUid());
-                                                count++;
-                                                editor.putString("count", String.valueOf(count));
-                                                editor1.apply();
+                                                editor1.putString(""+count, contacts.getPhone_number());
+                                                editor1.putString(contacts.getPhone_number()+"CN",contacts.getPhone_number()); // contacts number
+                                                editor1.putString(contacts.getPhone_number()+"PN",contacts.getProfile_name());
+                                                editor1.putString(contacts.getPhone_number()+"PURL",contacts.getProfile_image_url());
+                                                editor1.putString(contacts.getPhone_number()+"UID",contacts.getUid());
+                                                editor1.putString(contacts.getPhone_number()+"SND",name);
+                                                Log.w("raky", "saved count: "+count +" pn: "+contacts.getProfile_name()
+                                                +" cn: "+phoneNumber+" purl: "+contacts.getProfile_image_url()+" uid: "+contacts.getUid()+" snd: "
+                                                +name);
 
-                                                Log.w("raky", "bingo");
+                                                editor1.putString("count", String.valueOf(count));
+                                                editor1.apply();
+                                                count++;
+
 
 
                                             }
@@ -213,58 +217,49 @@ public class Contacts extends Fragment {
 
     private void LoadDataFromSharedPref(){
 
-//        String count = sharedPreferencesContactsData.getString("count", "");
-//        int c = Integer.parseInt(count);
-//        for (int i=1; i<c ; i++){
-//            String phoneNumber, name, uid, url;
-//            phoneNumber = sharedPreferences.getString();
-//            name = sharedPreferences.getString();
-//            uid = sharedPreferences.getString();
-//            url = sharedPreferences.getString();
-//
-//
-//        }
+        String count = sharedPreferencesContactsData.getString("count", ""); //getting contact number
+        int c = 0;
+        try {
+            c = Integer.parseInt(count);
+            Log.w("raky", "count loaded "+count);
+        }
+        catch (Exception e){
+            //number format exception
+        }
 
-        RecyclerViewList contacts = new RecyclerViewList();
-        contacts.setPhone_number("+918699139235");
-        contacts.setProfile_image_url("https://cloud.netlifyusercontent.com/assets/344dbf88-fdf9-42bb-adb4-46f01eedd629/242ce817-97a3-48fe-9acd-b1bf97930b01/09-posterization-opt.jpg");
-        contacts.setProfile_name("Sunny");
-        contacts.setUid("dsadsadsadsadsadsa");
-        list.add(contacts);
+        for (int i=1; i<=c ; i++){
+
+            final String phone_number = sharedPreferencesContactsData.getString(""+i, "");
+            Log.w("raky", "pn:" +phone_number +" count:"+ count);
+            if (!TextUtils.isEmpty(phone_number)){
+                RecyclerViewList contacts = new RecyclerViewList();
+                String phoneNumber, nameSavedOnDatabase, uid, url, nameSavedOnDevice;
+                phoneNumber = sharedPreferencesContactsData.getString(phone_number+"CN","");
+                nameSavedOnDatabase = sharedPreferencesContactsData.getString(phone_number+"PN","");
+                nameSavedOnDevice = sharedPreferencesContactsData.getString(phone_number+"SND","");
+                uid = sharedPreferencesContactsData.getString(phone_number+"UID","");
+                url = sharedPreferencesContactsData.getString(phone_number+"PURL","");
+
+                Log.w("raky", "saved count: "+count +" pn: "+nameSavedOnDatabase
+                        +" cn: "+phoneNumber+" purl: "+url+" uid: "+uid+" snd: "
+                        +nameSavedOnDevice);
+
+                contacts.setPhone_number(phoneNumber);
+                contacts.setProfile_image_url(url);
+                contacts.setProfile_name(nameSavedOnDatabase);
+                contacts.setUid(uid);
+                contacts.setName_saved_on_device(nameSavedOnDevice);
+                list.add(contacts);
+
+
+            }
+        }
+
 
         adapter = new ContactsRecyclerViewAdapter(getActivity(), list);
         recyclerView.setAdapter(adapter);
 
 
-
-
-     /*   databaseReference.child("AangadiaProfile").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                if(list!=null) {
-                    list.clear();  // v v v v important (eliminate duplication of data)
-                }
-
-                for (DataSnapshot postSnapshot : snapshot.getChildren()) {
-                    RecyclerViewList aangadiaData = postSnapshot.getValue(RecyclerViewList.class);
-                    list.add(aangadiaData);
-                }
-
-                if (list.isEmpty())
-                    showEmptyPage();
-
-                adapter = new ContactsRecyclerViewAdapter(getActivity(), list);
-                recyclerView.setAdapter(adapter);
-               // progressDialog.dismiss();
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Hiding the progress dialog.
-               // progressDialog.dismiss();
-            }
-        });*/
     }
 
 

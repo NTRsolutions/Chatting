@@ -90,6 +90,12 @@ public class MainPage extends AppCompatActivity {
 
     }
 
+    public void onBackPressed(){
+        super.onBackPressed();
+        this.moveTaskToBack(true);
+        MainPage.this.finish();
+    }
+
 
 
 }

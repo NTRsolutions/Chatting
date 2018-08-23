@@ -5,6 +5,7 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="appColor">#01B9F5</color>
+    <color name="appColor50">#2001B9F5</color>
     <color name="black">#000000</color>
     <color name="whiteSmoke">#F5F5F5</color>
     <color name="transparentWhite">#80F5F5F5</color>
