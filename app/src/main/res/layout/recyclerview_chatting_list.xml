@@ -13,58 +13,88 @@
     app:cardElevation="0dp"
     >
 
+
     <RelativeLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/rcl_relativeLayout1"
         xmlns:app="http://schemas.android.com/tools"
         android:layout_marginTop="@dimen/space8dp"
-
+        android:layout_marginEnd="32dp"
+        android:background="@drawable/custom_rectangle_message_by_sender"
+        android:padding="@dimen/space8dp"
+        android:paddingStart="@dimen/space8dp"
+        android:paddingEnd="@dimen/space8dp"
+        android:visibility="gone"
         >
 
         <!--receiver-->
-        <!--<TextView-->
-            <!--android:id="@+id/cl_textMessageFromReceiver"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginEnd="32dp"-->
-            <!--android:background="@drawable/custom_rectangle_message_by_sender"-->
-            <!--android:padding="@dimen/space8dp"-->
-            <!--android:paddingStart="@dimen/space8dp"-->
-            <!--android:paddingEnd="@dimen/space8dp"-->
-            <!--android:layout_marginStart="@dimen/space8dp"-->
-            <!--android:textColor="@color/black"-->
-            <!--/>-->
+        <TextView
+            android:id="@+id/cl_textMessageFromReceiver"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/MyCustomTextStyle"
+            android:textColor="@color/black"
+            />
+
+        <TextView
+            android:id="@+id/rcl_dateTime1"
+            android:layout_below="@+id/cl_textMessageFromReceiver"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black90"
+            android:textSize="10dp"
+            android:layout_marginTop="3dp"
+            />
 
 
     </RelativeLayout>
 
-    <LinearLayout
+    <RelativeLayout
+        android:id="@+id/rcl_relativeLayout2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/rcl_relativeLayout2"
-        xmlns:app="http://schemas.android.com/tools"
+        android:layout_marginEnd="32dp"
         android:layout_marginTop="@dimen/space8dp"
-        android:layoutDirection="rtl"
-        android:orientation="vertical"
+        android:background="@drawable/custom_rectangle_message_by_me"
+        android:padding="@dimen/space8dp"
+        android:paddingEnd="@dimen/space8dp"
+        android:paddingStart="@dimen/space8dp"
         android:layout_gravity="end"
+        android:layoutDirection="rtl"
+        android:visibility="gone"
         >
 
         <!--me-->
-        <!--<TextView-->
-            <!--android:id="@+id/cl_textMessageFromMe"-->
-            <!--android:layout_width="300dp"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginStart="32dp"-->
-            <!--android:layout_alignParentEnd="true"-->
-            <!--android:background="@drawable/custom_rectangle_message_by_me"-->
-            <!--android:padding="@dimen/space8dp"-->
-            <!--android:layout_marginEnd="@dimen/space8dp"-->
-            <!--android:textColor="@color/black"-->
-            <!--android:paddingStart="@dimen/space8dp"-->
-            <!--android:paddingEnd="@dimen/space8dp"-->
-            <!--/>-->
+        <TextView
+            android:id="@+id/cl_textMessageFromMe"
+            style="@style/MyCustomTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            />
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/rcl_dateTime2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/cl_textMessageFromMe"
+            android:layout_marginTop="3dp"
+            android:textColor="@color/black90"
+            android:layout_toLeftOf="@+id/cl_tick"
+            android:layout_marginStart="3dp"
+            android:textSize="10dp" />
+
+        <ImageView
+            android:id="@+id/cl_tick"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:background="@drawable/ic_single_tick"
+            android:layout_below="@+id/cl_textMessageFromMe"
+            android:layout_marginTop="4dp"
+            />
+
+    </RelativeLayout>
+
 
 </android.support.v7.widget.CardView>

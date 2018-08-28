@@ -27,6 +27,7 @@ import com.squareup.picasso.Picasso;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -58,9 +59,11 @@ public class Chatting extends AppCompatActivity {
     EditText textMessage;
     ImageButton sendMessage, back;
 
-    private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("all_chats");
+    private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("user_chat_records");
+    private DatabaseReference databaseReference2 = FirebaseDatabase.getInstance().getReference().child("all_chats");
     private DatabaseReference databaseReference1 = FirebaseDatabase.getInstance().getReference().child("all_chats");
     private FirebaseUser mAuth;
+    String chat_uid;
 
     String my_uid, receiver_uid;
 
@@ -112,14 +115,20 @@ public class Chatting extends AppCompatActivity {
         receiver_uid = sharedPreferencesChatterDetails.getString(UID, "");
 
          LoadMessages();
+         chat_uid = sharedPreferencesChatterDetails.getString(my_uid+receiver_uid+"uid", "");
 
     }
 
 
     private void LoadMessages() {
-        final String uid = sharedPreferences.getString(MY_UID, "");
+        if (TextUtils.isEmpty(chat_uid)){
+            SharedPreferences.Editor editor = sharedPreferencesChatterDetails.edit();
+            chat_uid = getCombinedUID();
+            editor.putString(my_uid+receiver_uid+"uid", chat_uid);
+            editor.apply();
+        }
 
-        databaseReference1.child(uid).child(receiver_uid).child("chat")
+        databaseReference2.child(chat_uid)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot snapshot) {
@@ -130,7 +139,7 @@ public class Chatting extends AppCompatActivity {
 
                         for (DataSnapshot postSnapshot : snapshot.getChildren()) {
                             RecyclerViewList chats = postSnapshot.getValue(RecyclerViewList.class);
-                            Log.w("mes123", chats.getMessage());
+                           // Log.w("mes123", chats.getMessage());
                             chat_list.add(chats);
                         }
 
@@ -157,7 +166,7 @@ public class Chatting extends AppCompatActivity {
     //    show empty page
     public void showEmptyPage() {
         try {
-            Toast.makeText(Chatting.this, "No Chat yett!", Toast.LENGTH_LONG).show();
+            Toast.makeText(Chatting.this, "No Chat yet!", Toast.LENGTH_LONG).show();
         } catch (Exception e) {
 //            exception
         }
@@ -167,24 +176,51 @@ public class Chatting extends AppCompatActivity {
 
     private void sendMessage() {
 
+
+        if (TextUtils.isEmpty(chat_uid)){
+            SharedPreferences.Editor editor = sharedPreferencesChatterDetails.edit();
+            chat_uid = getCombinedUID();
+            editor.putString(my_uid+receiver_uid+"uid", chat_uid);
+            editor.apply();
+            }
+
+        final String status = sharedPreferencesChatterDetails.getString(my_uid+receiver_uid+"status", "");
+        if (TextUtils.isEmpty(status)){
+            SharedPreferences.Editor editor = sharedPreferencesChatterDetails.edit();
+            databaseReference.child(my_uid).child(receiver_uid).child("chat_record").child("status").setValue(true);
+            databaseReference.child(receiver_uid).child(my_uid).child("chat_record").child("status").setValue(true);
+            editor.putString(my_uid+receiver_uid+"status", "posted");
+            editor.apply();
+        }
+
         final String message = textMessage.getText().toString().trim();
+        final String pushKey = databaseReference.push().getKey();
 
+        List<String> dateTime = getDateTime();
+        String date = dateTime.get(0);
+        String time = dateTime.get(1);
 
-        String pushKey = databaseReference.push().getKey();
-
-
-        String dateTime = getDateTime();
-
-        //if (!TextUtils.isEmpty(message))
-        databaseReference.child(my_uid).child(receiver_uid).child("chat").child(pushKey).child("message").setValue(message);
-        databaseReference.child(my_uid).child(receiver_uid).child("chat").child(pushKey).child("date_time").setValue(dateTime);
+        databaseReference2.child(chat_uid).child(pushKey).child("push_uid").setValue(pushKey);
+        databaseReference2.child(chat_uid).child(pushKey).child("message").setValue(message);
+        databaseReference2.child(chat_uid).child(pushKey).child("date").setValue(date);
+        databaseReference2.child(chat_uid).child(pushKey).child("time").setValue(time);
 
         String my_uid7 = my_uid.substring(my_uid.length() - 7, my_uid.length());
-        databaseReference.child(my_uid).child(receiver_uid).child("chat").child(pushKey).child("identity").setValue(my_uid7);
+        databaseReference2.child(chat_uid).child(pushKey).child("identity").setValue(my_uid7);
         textMessage.setText("");
 
     }
 
+    private String getCombinedUID() {
+        String uid1, uid2;
+        uid1 = my_uid;
+        uid2 = receiver_uid;
+        ArrayList<String> uid_list = new ArrayList<>();
+        uid_list.add(0, uid1.substring(0,7));
+        uid_list.add(1, uid2.substring(0,7));
+        Collections.sort(uid_list);
+        return  uid_list.get(0)+uid_list.get(1);
+    }
 
 
     private void setChatterDetails() {
@@ -213,13 +249,16 @@ public class Chatting extends AppCompatActivity {
     }
 
 
-    private String getDateTime(){
+    private List<String> getDateTime(){
         Calendar c = Calendar.getInstance();
-        SimpleDateFormat dateformat = new SimpleDateFormat("dd-MMM-yyyy hh:mm aa");
-        String datetime = dateformat.format(c.getTime());
-        System.out.println(datetime);
-        Log.w("raky", datetime);
-        return datetime;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy hh:mm aa");
+        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm aa");
+        String date = dateFormat.format(c.getTime());
+        String time = timeFormat.format(c.getTime());
+        ArrayList<String> list = new ArrayList<>();
+        list.add(0, date);
+        list.add(1, time);
+        return list;
     }
 
     public void onBackPressed(){

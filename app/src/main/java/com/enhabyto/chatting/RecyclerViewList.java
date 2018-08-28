@@ -2,7 +2,7 @@ package com.enhabyto.chatting;
 
 public class RecyclerViewList {
 
-    String phone_number, profile_image_url, profile_name, uid, name_saved_on_device, date_time, identity, message;
+    String phone_number, profile_image_url, profile_name, uid, name_saved_on_device, date, time, identity, message, push_uid, status;
 
     public RecyclerViewList(){
         }
@@ -19,8 +19,12 @@ public class RecyclerViewList {
 
     public String getName_saved_on_device(){ return name_saved_on_device; }
 
-    public String getDate_time() {
-        return date_time;
+    public String getDate() {
+        return date;
+    }
+
+    public String getTime() {
+        return time;
     }
 
     public String getIdentity() {
@@ -30,6 +34,10 @@ public class RecyclerViewList {
     public String getMessage() {
         return message;
     }
+
+    public String getPush_uid() { return push_uid; }
+
+    public String getStatus() { return status; }
 
     public void setPhone_number(String phone_number){ this.phone_number = phone_number; }
 

@@ -151,8 +151,12 @@ public class Contacts extends Fragment {
                                         try {
 
                                             phoneNumber = phoneNumber.replace(")","").replace("(","").replace("-","").replace(" ","");
-                                            if (Objects.requireNonNull(contacts).getPhone_number().contains(phoneNumber) && !TextUtils.equals(uid, contacts.getUid())){
+
+                                            ArrayList<String> list_of_all_contacts = new ArrayList<>();
+
+                                            if (Objects.requireNonNull(contacts).getPhone_number().contains(phoneNumber) && !TextUtils.equals(uid, contacts.getUid()) && !list_of_all_contacts.contains(phoneNumber)){
                                                // Toast.makeText(getActivity(), ""+contacts.getUid(), Toast.LENGTH_SHORT).show();
+                                                list_of_all_contacts.add(phoneNumber);
                                                 contacts.setName_saved_on_device(name);
                                                 list.add(contacts);
 
