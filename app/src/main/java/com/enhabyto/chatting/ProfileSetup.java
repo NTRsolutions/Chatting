@@ -184,7 +184,7 @@ public class ProfileSetup extends AppCompatActivity {
                 // try block 2
                 try {
                     File compressedImageFile = new Compressor(ProfileSetup.this)
-                            .setQuality(20)
+                            .setQuality(10)
                             .setCompressFormat(Bitmap.CompressFormat.WEBP)
                             .compressToFile(actualImage);
 

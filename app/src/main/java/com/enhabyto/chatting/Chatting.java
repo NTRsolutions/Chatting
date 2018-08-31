@@ -188,7 +188,10 @@ public class Chatting extends AppCompatActivity {
         if (TextUtils.isEmpty(status)){
             SharedPreferences.Editor editor = sharedPreferencesChatterDetails.edit();
             databaseReference.child(my_uid).child(receiver_uid).child("chat_record").child("status").setValue(true);
+            databaseReference.child(my_uid).child(receiver_uid).child("chat_record").child("chat_uid").setValue(chat_uid);
+
             databaseReference.child(receiver_uid).child(my_uid).child("chat_record").child("status").setValue(true);
+            databaseReference.child(receiver_uid).child(my_uid).child("chat_record").child("chat_uid").setValue(chat_uid);
             editor.putString(my_uid+receiver_uid+"status", "posted");
             editor.apply();
         }
@@ -240,7 +243,7 @@ public class Chatting extends AppCompatActivity {
         }
         else {
             Glide.with(Chatting.this)
-                    .load(R.drawable.ic_square_default_profile_picture)
+                    .load(R.drawable.ic_default_profile_image)
                     .into(profileImage);
         }
 

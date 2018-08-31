@@ -296,8 +296,8 @@ public class PhoneLogin extends AppCompatActivity {
 
                             databaseReference.child(user_uid).child("uid").setValue(user_uid);
                             databaseReference.child(user_uid).child("phone_number").setValue(phone_number);
-//                            DatabaseReference secret = FirebaseDatabase.getInstance().getReference();
-//                            secret.child("registered_contacts").child(user_uid).child("phone_number").setValue(phone_number);
+                            DatabaseReference secret = FirebaseDatabase.getInstance().getReference();
+                            secret.child("registered_contacts").child(phone_number).setValue(user_uid);
 
                             startActivity(new Intent(PhoneLogin.this, ProfileSetup.class));
                             PhoneLogin.this.finish();
